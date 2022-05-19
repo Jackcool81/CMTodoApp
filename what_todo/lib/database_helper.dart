@@ -13,14 +13,13 @@ import 'todo.dart';
 class DatabaseHelper {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseReference _db = FirebaseDatabase.instance.ref();
-  get user => _auth.currentUser;
+  //get user => _auth.currentUser;
   //get uid => user.uid;
+  late UserCredential user;
   static String uid = "123";
-
   Future signUp({required String email, required String password}) async {
-    //print(uid);
     try {
-      await _auth.createUserWithEmailAndPassword(
+      user = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -51,15 +50,15 @@ class DatabaseHelper {
 
   Future<int> insertTask(Task task) async {
     DatabaseReference _db1 = FirebaseDatabase.instance.ref();
-    String key = _db1.child("list").child(uid).child('tasks').push().key!;
+    String currentuser = _auth.currentUser!.uid;
+    //_db1.child("list").child(currentuser).child('tasks').key!;
    // Map<String, Object> map = new HashMap<>() as Map<String, Object>;
    // map.put(key, "comment5");
     int taskId = 0;
     //var myRef = _db1.child("users").child(uid).child('tasks').push();
    // myRef.set(task.toMap());
-    _db1.child("list").child(uid).child('tasks').update(task.toMap());
-      update(task.toMap(), key);
-
+    _db1.child("list").child(currentuser).child('tasks').update(task.toMap());
+    //  update(task.toMap(), key);
     // String key = rootRef.child("list").child(list_id).push().getKey();
     // Map<String, Object> map = new HashMap<>();
     // map.put(key, "comment5");
@@ -87,7 +86,7 @@ class DatabaseHelper {
   //   Database _db = await database();
   //   await _db.insert('todo', todo.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   // }
-  //
+
   Future<List<Task>> getTasks() async {
     print("Hi");
     List<Map<String, dynamic>> taskMap = (await FirebaseDatabase.instance.ref("tasks") as List<Map<String, dynamic>>);
