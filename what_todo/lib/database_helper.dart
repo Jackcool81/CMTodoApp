@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'authentication.dart';
+import 'dart:core';
 import 'task.dart';
 import 'todo.dart';
 
@@ -17,6 +18,7 @@ class DatabaseHelper {
   //get uid => user.uid;
   late UserCredential user;
   static String uid = "123";
+  List<Task> tasklist = [];
   Future signUp({required String email, required String password}) async {
     try {
       user = await _auth.createUserWithEmailAndPassword(
@@ -49,15 +51,24 @@ class DatabaseHelper {
   }
 
   Future<int> insertTask(Task task) async {
-    DatabaseReference _db1 = FirebaseDatabase.instance.ref();
+    tasklist.add(task);
+    DatabaseReference _db1 = FirebaseDatabase.instance.ref(
+      "users"
+    );
     String currentuser = _auth.currentUser!.uid;
+    //_db1.child(currentuser).child('tasks').set(tasklist);
+    _db1.child(currentuser).child('tasks').push().set(task.toMap());
+
+    //
+  //  DatabaseReference newChildRef = _db1.push();
+  //  String key = newChildRef.key!;
+ //   _db1.child(currentuser).child(key).set(task.toMap());
     //_db1.child("list").child(currentuser).child('tasks').key!;
    // Map<String, Object> map = new HashMap<>() as Map<String, Object>;
    // map.put(key, "comment5");
     int taskId = 0;
     //var myRef = _db1.child("users").child(uid).child('tasks').push();
    // myRef.set(task.toMap());
-    _db1.child("list").child(currentuser).child('tasks').update(task.toMap());
     //  update(task.toMap(), key);
     // String key = rootRef.child("list").child(list_id).push().getKey();
     // Map<String, Object> map = new HashMap<>();
@@ -72,33 +83,47 @@ class DatabaseHelper {
     return taskId;
   }
 
-  // Future<void> updateTaskTitle(int id, String title) async {
-  //   Database _db = await database();
-  //   await _db.rawUpdate("UPDATE tasks SET title = '$title' WHERE id = '$id'");
-  // }
-  //
-  // Future<void> updateTaskDescription(int id, String description) async {
-  //   Database _db = await database();
-  //   await _db.rawUpdate("UPDATE tasks SET description = '$description' WHERE id = '$id'");
-  // }
-  //
-  // Future<void> insertTodo(Todo todo) async {
-  //   Database _db = await database();
-  //   await _db.insert('todo', todo.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
-  // }
+  void saveMessage(Task message) {
+    _db.push().set(message.toMap());
+  }
+
+  Query getMessageQuery() {
+    return _db;
+  }
+
+
 
   Future<List<Task>> getTasks() async {
     print("Hi");
-    List<Map<String, dynamic>> taskMap = (await FirebaseDatabase.instance.ref("tasks") as List<Map<String, dynamic>>);
-    print(taskMap.length);
+
+    DatabaseReference _db1 = FirebaseDatabase.instance.ref(
+        "users"
+    );
+
+    String currentuser = _auth.currentUser!.uid;
+    DatabaseReference newChildRef = _db1.push();
+    String key = newChildRef.key!;
+    Query thelist = _db.child(currentuser).child('tasks').orderByKey();
+    List<Map<String, dynamic>> taskMap = (await thelist.get() as List<Map<String, dynamic>>);
+    DatabaseReference starCountRef =
+    FirebaseDatabase.instance.ref('posts/$currentuser/tasks');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      print(data.toString());
+      //taskMap.add(data);
+    });
+
+    //const mostViewedPosts = query(ref(db, 'posts'), orderByChild('metrics/views'));
+
+    print("taskmap");
+    //print(taskMap.length);
     return List.generate(taskMap.length, (index) {
       return Task(
-          id: taskMap[index]['id'],
           title: taskMap[index]['title'],
-          description: taskMap[index]['description']
       );
     });
   }
+
   //
   // Future<List<Todo>> getTodo(int taskId) async {
   //   Database _db = await database();
@@ -115,6 +140,7 @@ class DatabaseHelper {
   //
   // Future<void> deleteTask(int id) async {
   //   Database _db = await database();
+
   //   await _db.rawDelete("DELETE FROM tasks WHERE id = '$id'");
   //   await _db.rawDelete("DELETE FROM todo WHERE taskId = '$id'");
   // }

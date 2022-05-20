@@ -1,63 +1,33 @@
 {
   "project_info": {
-    "project_number": "992574640731",
-    "firebase_url": "https://codingmindsapp-default-rtdb.firebaseio.com",
-    "project_id": "codingmindsapp",
-    "storage_bucket": "codingmindsapp.appspot.com"
+    "project_number": "239807286757",
+    "project_id": "finaltodo-e0c8f",
+    "storage_bucket": "finaltodo-e0c8f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:992574640731:android:477b12090a07a762e7a57e",
-        "android_client_info": {
-          "package_name": "com.example.flutterapp.flutter_app_5_11_2022_2"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "992574640731-3epsjgngtup1oigelucn9tuln5sq6bje.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB5kSwwWuYqWynTjeqbOdfgsAOI1wVAZhc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "992574640731-3epsjgngtup1oigelucn9tuln5sq6bje.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:992574640731:android:f796d745258e0e87e7a57e",
+        "mobilesdk_app_id": "1:239807286757:android:8e2bdaba4c63aa34b5730c",
         "android_client_info": {
           "package_name": "com.example.what_todo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "992574640731-3epsjgngtup1oigelucn9tuln5sq6bje.apps.googleusercontent.com",
+          "client_id": "239807286757-liu2j3o0kihlp74tb9hu8n28f1h18rdl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB5kSwwWuYqWynTjeqbOdfgsAOI1wVAZhc"
+          "current_key": "AIzaSyA2f8WZV8fBiVzv4kfnMearV19xbiDyGpw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "992574640731-3epsjgngtup1oigelucn9tuln5sq6bje.apps.googleusercontent.com",
+              "client_id": "239807286757-liu2j3o0kihlp74tb9hu8n28f1h18rdl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

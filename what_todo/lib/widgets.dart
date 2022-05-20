@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 class TaskCardWidget extends StatelessWidget {
   final String? title;
-  final String? desc;
-
-  TaskCardWidget({this.title, this.desc});
-
+  TaskCardWidget(this.title);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,19 +29,7 @@ class TaskCardWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 10.0,
-            ),
-            child: Text(
-              desc ?? "No Description Added",
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color(0xFF86829D),
-                height: 1.5,
-              ),
-            ),
-          )
+
         ],
       ),
     );

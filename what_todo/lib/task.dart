@@ -1,14 +1,21 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class Task {
-  final int? id;
   final String? title;
-  final String? description;
-  Task({this.id, this.title, this.description});
+  Task({
+    required this.title,
+  });
+
+  Task.fromJson(Map<dynamic, dynamic> json)
+      :title = json['title'] as String?;
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'title': title,
-      'description': description,
     };
   }
+
+
+
+
 }

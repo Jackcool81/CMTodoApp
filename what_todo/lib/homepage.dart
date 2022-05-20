@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:what_todo/database_helper.dart';
 import 'package:what_todo/task.dart';
 import 'taskpage.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import '../widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -33,36 +34,19 @@ class _HomepageState extends State<Homepage> {
               children: [
                 Image(image: AssetImage('assests/images/logo.png')),
                 Expanded(
-                    child: FutureBuilder( //This allows us to scroll through tasks
-                    initialData: [],
-                    future: _db.getTasks(),
-                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.hasData) {
-                        x = snapshot.data.length;
-                      }
-                      else {
-                        x = 0;
-                      }
-                      print(x);
-                      return ListView.builder(
-                        itemCount: x,
-                        itemBuilder: (context, index) {
-                        return TaskCardWidget(
-                          title: snapshot.data[index].title,
-
-                        );
+                      child: FirebaseAnimatedList(
+                        query: _db.getMessageQuery(),
+                        itemBuilder: (context, snapshot, animation, index) {
+                          final json = snapshot.value as Map<dynamic, dynamic>;
+                          final message = Task.fromJson(json);
+                            return TaskCardWidget(
+                              message.title
+                            );
                           },
-                        //var data = (snapshot.data as List<Task>).toList(),
-
-                      );
-
-                     },
-
-                   ),
-                  ),
-
-              ],
-            ),
+    ),
+                      ),
+    ],
+    ),
             Positioned( //this is our add task button that takes us to the taskpage
               bottom: 24.0,
               right: 0.0,
@@ -88,12 +72,13 @@ class _HomepageState extends State<Homepage> {
                       "assests/images/add_icon.png",
                     ),
                   ),
-                ),
-              ),
-            ),
-          ],
+    ),
+          ),
         ),
-      ),
-    ));
+    ],
+    )
+    )
+        )
+    );
   }
 }
