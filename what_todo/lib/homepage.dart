@@ -16,10 +16,11 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
 
   DatabaseHelper _db = DatabaseHelper();
+  List<TaskCardWidget> myList = [];
+
   int x = 0;
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -34,17 +35,12 @@ class _HomepageState extends State<Homepage> {
               children: [
                 Image(image: AssetImage('assests/images/logo.png')),
                 Expanded(
-                      child: FirebaseAnimatedList(
-                        query: _db.getMessageQuery(),
-                        itemBuilder: (context, snapshot, animation, index) {
-                          final json = snapshot.value as Map<dynamic, dynamic>;
-                          final message = Task.fromJson(json);
-                            return TaskCardWidget(
-                              message.title
-                            );
-                          },
-    ),
+                  child: ListView (
+                    children: _db.getValue()
+
+                  )
                       ),
+
     ],
     ),
             Positioned( //this is our add task button that takes us to the taskpage

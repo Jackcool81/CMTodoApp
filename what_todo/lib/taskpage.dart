@@ -86,26 +86,13 @@ class _TaskpageState extends State<Taskpage> {
                         ),
                         Expanded( //this is the task text field
                           child: TextField(
-                            //focusNode: _titleFocus,
                             onSubmitted: (value) async {
                               // Check if the field is not empty
                               if (value != "") {
                                 DatabaseHelper _dbHelper = DatabaseHelper();
-                                // Check if the task is null
-                              //  if (widget.task == null) {
                                   Task _newTask = Task(
                                       title: value);
                                   await _dbHelper.insertTask(_newTask);
-                                  // setState(() {
-                                  //   _contentVisile = true;
-                                  //   _taskTitle = value;
-                                  // });
-                                  print("New task has been created");
-                                //} else {
-                                  //await _dbHelper.updateTaskTitle(_taskId, value);
-                                 // print("Task Updated");
-                               // }
-                                //_descriptionFocus.requestFocus();
                               }
                             },
                             controller: TextEditingController()

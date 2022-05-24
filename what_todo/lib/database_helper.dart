@@ -1,12 +1,14 @@
 import 'dart:collection';
-
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 //import 'package:sqflite/sqflite.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:what_todo/widgets.dart';
 import 'authentication.dart';
 import 'dart:core';
 import 'task.dart';
+import 'taskpage.dart';
 import 'todo.dart';
 
 
@@ -14,6 +16,9 @@ import 'todo.dart';
 class DatabaseHelper {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseReference _db = FirebaseDatabase.instance.ref();
+  String title = "hey man";
+  //int i = 0;
+  final List<TaskCardWidget> data = <TaskCardWidget>[];
   //get user => _auth.currentUser;
   //get uid => user.uid;
   late UserCredential user;
@@ -50,37 +55,13 @@ class DatabaseHelper {
     print('signout');
   }
 
-  Future<int> insertTask(Task task) async {
+  insertTask(Task task) async {
     tasklist.add(task);
     DatabaseReference _db1 = FirebaseDatabase.instance.ref(
       "users"
     );
     String currentuser = _auth.currentUser!.uid;
-    //_db1.child(currentuser).child('tasks').set(tasklist);
     _db1.child(currentuser).child('tasks').push().set(task.toMap());
-
-    //
-  //  DatabaseReference newChildRef = _db1.push();
-  //  String key = newChildRef.key!;
- //   _db1.child(currentuser).child(key).set(task.toMap());
-    //_db1.child("list").child(currentuser).child('tasks').key!;
-   // Map<String, Object> map = new HashMap<>() as Map<String, Object>;
-   // map.put(key, "comment5");
-    int taskId = 0;
-    //var myRef = _db1.child("users").child(uid).child('tasks').push();
-   // myRef.set(task.toMap());
-    //  update(task.toMap(), key);
-    // String key = rootRef.child("list").child(list_id).push().getKey();
-    // Map<String, Object> map = new HashMap<>();
-    // map.put(key, "comment5");
-    // rootRef.child("list").child(list_id).updateChildren(map);
-    // conflictAlgorithm: ConflictAlgorithm.replace).then((value); if data conflicts replace
-
-    // Database _db = await database();
-    // await _db.insert('tasks', task.toMap(), conflictAlgorithm: ConflictAlgorithm.replace).then((value) {
-    //   taskId = value;
-    // });
-    return taskId;
   }
 
   void saveMessage(Task message) {
@@ -91,37 +72,42 @@ class DatabaseHelper {
     return _db;
   }
 
+  List<TaskCardWidget> getValue() {
 
-
-  Future<List<Task>> getTasks() async {
-    print("Hi");
-
+    String currentuser = _auth.currentUser!.uid;
     DatabaseReference _db1 = FirebaseDatabase.instance.ref(
         "users"
     );
+    var ref = _db1.child(currentuser).child('tasks');
+    ref.onValue.listen((event) {
+      //i = 0;
+      int x = event.snapshot.children.length;
+      data.clear();
+      for (int i = 0; i < x; i++){
+        title = event.snapshot.children.elementAt(i).value.toString();
+        data.insert(i, (TaskCardWidget(
+                 title
+             )));
+        // data[i] = (TaskCardWidget(
+        //     title
+        // ));
+      };
+    });
+    return data;
+  }
 
+  getTasks() async {
+    DatabaseReference _db1 = FirebaseDatabase.instance.ref(
+        "users"
+    );
+    print("we made it here");
     String currentuser = _auth.currentUser!.uid;
-    DatabaseReference newChildRef = _db1.push();
-    String key = newChildRef.key!;
-    Query thelist = _db.child(currentuser).child('tasks').orderByKey();
-    List<Map<String, dynamic>> taskMap = (await thelist.get() as List<Map<String, dynamic>>);
-    DatabaseReference starCountRef =
-    FirebaseDatabase.instance.ref('posts/$currentuser/tasks');
-    starCountRef.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      print(data.toString());
-      //taskMap.add(data);
-    });
-
-    //const mostViewedPosts = query(ref(db, 'posts'), orderByChild('metrics/views'));
-
-    print("taskmap");
-    //print(taskMap.length);
-    return List.generate(taskMap.length, (index) {
-      return Task(
-          title: taskMap[index]['title'],
-      );
-    });
+    Task thefirst = Task(title: "start");
+    var newKey = _db1.child(currentuser).child('tasks').push();
+    String newerKey = newKey.key.toString();
+    print(newerKey);
+    _db1.child(currentuser).child('tasks').child(newerKey).set(thefirst.toMap());
+    _db1.child(currentuser).child('tasks').child(newerKey).remove();
   }
 
   //

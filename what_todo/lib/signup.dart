@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:what_todo/homepage.dart';
 import 'authentication.dart';
-import 'home.dart';
 
 class Signup extends StatelessWidget {
   @override
@@ -223,7 +223,7 @@ class _SignupFormState extends State<SignupForm> {
                       .then((result) {
                     if (result == null) {
                       Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                          MaterialPageRoute(builder: (context) => Homepage()));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
