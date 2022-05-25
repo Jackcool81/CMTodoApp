@@ -36,8 +36,8 @@ class _HomepageState extends State<Homepage> {
                 Image(image: AssetImage('assests/images/logo.png')),
                 Expanded(
                   child: ListView (
-                    children: _db.getValue()
-
+                    children:
+                      _db.getValue()
                   )
                       ),
 

@@ -32,11 +32,6 @@ class AuthenticationHelper {
     return user.uid;
   }
 
-  //  writeUserData(user) {
-  //   DatabaseReference mDatabase = FirebaseDatabase.instance.ref();
-  //   mDatabase.child("users").child(user.uid).set("hello world");
-  // }
-
   //SIGN IN METHOD
   Future signIn({required String email, required String password}) async {
     try {
